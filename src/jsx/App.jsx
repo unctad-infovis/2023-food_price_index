@@ -52,7 +52,7 @@ function App() {
     if (d[0].year !== curYear) {
       d3.select(event.currentTarget).attr('stroke-width', 1);
     }
-    d3.selectAll('.line').attr('stroke', (line) => ((line[0].year !== curYear) ? f(1 - ((curYear - line[0].year) / 100) * 2) : '#009edb'));
+    d3.selectAll('.line').attr('stroke', (line) => ((line[0].year !== curYear) ? f(1 - ((curYear - line[0].year) / 100) * 2) : '#005392'));
     tooltip
       .transition()
       .duration(200)
@@ -85,7 +85,7 @@ function App() {
       .attr('class', `line line_${year}`)
       .datum(data.filter(el => (el.year === year)))
       .attr('fill', 'none')
-      .attr('stroke', '#009edb')
+      .attr('stroke', '#005392')
       .attr('stroke-width', 6)
       .attr('d', d3.line()
         .x((d) => x.current(d.date.toLocaleString('default', { month: 'short' }).slice(0, 3)))

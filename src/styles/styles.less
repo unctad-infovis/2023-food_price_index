@@ -46,11 +46,12 @@
         background-color: transparent;
         border: 0;
         box-sizing: border-box;
-        color: @unbluetext;
+        color: @unbluedarktext;
         cursor: pointer;
         font-size: 40px;
         line-height: 40px;
         margin: 0;
+        outline: none;
         padding: 0;
         text-align: middle;
         vertical-align: middle;
@@ -59,9 +60,13 @@
       input {
         box-sizing: border-box;
         margin: 0;
+        outline: none;
         padding: 0;
         vertical-align: middle;
         width: calc(100% - 40px);
+        &[type="range"] {
+          accent-color: @unbluedarktext;
+        }
       }
     }
     .chart_container {
@@ -89,17 +94,18 @@
         text-shadow: 1px 1px 5px #fff;
       }
       .year {
-        background-color: @unblue;
+        background-color: @unbluedarktext;
         bottom: 40px;
         color: #fff;
-        padding: 3px 7px;
         font-size: 16px;
         font-weight: 400;
         line-height: 18px;
+        padding: 3px 7px;
         position: absolute;
         right: 20px;
         .value {
-          font-weight: bold;
+          font-weight: 600;
+          letter-spacing: 0.05em;
         }
       }
     }
