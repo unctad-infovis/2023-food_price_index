@@ -66,6 +66,11 @@
     }
     .chart_container {
       position: relative;
+      .lines {
+        .line {
+          transition: stroke 0.1s ease-in-out;
+        }
+      }
       .axis {
         .tick {
           text {
@@ -73,6 +78,15 @@
             font-size: 14px;
           }
         }
+      }
+      .tooltip {
+        color: #000;
+        font-weight: 600;
+        font-size: 20px;
+        text-shadow: 1px 1px 5px #fff;
+        line-height: 20px;
+        opacity: 0;
+        position: absolute;
       }
       .year {
         background-color: @unblue;

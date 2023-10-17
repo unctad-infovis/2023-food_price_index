@@ -28,7 +28,36 @@ function App() {
   const [curYear, setCurYear] = useState(startYear);
   const [data, setData] = useState(false);
 
-  const f = chroma.scale(['rgba(221, 221, 221, 0.75)', '#009edb']).domain([0.27, 1]);
+  const f = chroma.scale(['rgba(0, 158, 219, 0.1)', '#009edb']).domain([0.27, 1]);
+
+  const tooltip = d3.select('.tooltip');
+
+  const mouseover = useCallback((event, d) => {
+    if (d[0].year !== curYear) {
+      d3.select(event.currentTarget).attr('stroke-width', 3);
+    }
+    d3.select(event.currentTarget).attr('stroke', '#ab1d37');
+    tooltip.style('opacity', 1);
+  }, [tooltip, curYear]);
+
+  const mousemove = useCallback((event, d) => {
+    tooltip
+      .html(`${d[0].year}`)
+      .style('opacity', 1)
+      .style('left', `${(event.x) / 2}px`)
+      .style('top', `${(event.y) / 2}px `);
+  }, [tooltip]);
+
+  const mouseleave = useCallback((event, d) => {
+    if (d[0].year !== curYear) {
+      d3.select(event.currentTarget).attr('stroke-width', 1);
+    }
+    d3.selectAll('.line').attr('stroke', (line) => ((line[0].year !== curYear) ? f(1 - ((curYear - line[0].year) / 100) * 2 - 0.4) : '#009edb'));
+    tooltip
+      .transition()
+      .duration(200)
+      .style('opacity', 0);
+  }, [tooltip, f, curYear]);
 
   const addData = useCallback((year) => {
     // Remove and add existing lines
@@ -36,7 +65,7 @@ function App() {
       svg.current.select(`path.line_${i}`).remove();
     }
     for (let i = (year - 1); i >= startYear; i--) {
-      svg.current.append('path')
+      svg.current.select('.lines').append('path')
         .attr('class', `line line_${i}`)
         .datum(data.filter(el => (el.year === i)))
         .attr('fill', 'none')
@@ -52,7 +81,7 @@ function App() {
       d3.select(nodes[i]).attr('stroke', (d) => f(1 - ((year - d[0].year) / 100) * 2 - 0.4)).attr('stroke-width', 1);
     });
     // Add the line
-    svg.current.append('path')
+    svg.current.select('.lines').append('path')
       .attr('class', `line line_${year}`)
       .datum(data.filter(el => (el.year === year)))
       .attr('fill', 'none')
@@ -61,7 +90,12 @@ function App() {
       .attr('d', d3.line()
         .x((d) => x.current(d.date.toLocaleString('default', { month: 'short' }).slice(0, 3)))
         .y((d) => y.current(d.value)));
-  }, [data, f]);
+
+    svg.current.selectAll('.line')
+      .on('mouseover', (event, d) => mouseover(event, d))
+      .on('mousemove', (event, d) => mousemove(event, d))
+      .on('mouseleave', (event, d) => mouseleave(event, d));
+  }, [data, f, mouseover, mousemove, mouseleave]);
 
   const toggleInterval = () => {
     if (interval !== null) {
@@ -117,6 +151,8 @@ function App() {
         'transform',
         `translate(${margin.left},${margin.top})`
       );
+
+    svg.current.append('g').attr('class', 'lines');
 
     // Add X axis
     x.current = d3.scalePoint()
@@ -189,6 +225,7 @@ function App() {
           <input className="play_range" type="range" aria-label="Range" value={curYear} min={startYear} max={endYear} onInput={(event) => changeYear(event)} onChange={(event) => changeYear(event)} />
         </div>
         <div className="chart_container">
+          <div className="tooltip" />
           <div className="chart" ref={chartRef} />
           <div className="year">
             <span className="label">Year:</span>
