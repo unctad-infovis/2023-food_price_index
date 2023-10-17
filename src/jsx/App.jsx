@@ -28,7 +28,7 @@ function App() {
   const [curYear, setCurYear] = useState(startYear);
   const [data, setData] = useState(false);
 
-  const f = chroma.scale(['rgba(0, 158, 219, 0.1)', '#009edb']).domain([0.27, 1]);
+  const f = chroma.scale(['rgba(0, 158, 219, 0.1)', 'rgba(0, 158, 219, 0.7)']).domain([0.67, 1]);
 
   const tooltip = d3.select('.tooltip');
 
@@ -52,7 +52,7 @@ function App() {
     if (d[0].year !== curYear) {
       d3.select(event.currentTarget).attr('stroke-width', 1);
     }
-    d3.selectAll('.line').attr('stroke', (line) => ((line[0].year !== curYear) ? f(1 - ((curYear - line[0].year) / 100) * 2 - 0.4) : '#009edb'));
+    d3.selectAll('.line').attr('stroke', (line) => ((line[0].year !== curYear) ? f(1 - ((curYear - line[0].year) / 100) * 2) : '#009edb'));
     tooltip
       .transition()
       .duration(200)
@@ -78,7 +78,7 @@ function App() {
     // Edit existing lines
     svg.current.selectAll('path.line').each((line, i, nodes) => {
       // d3.select(nodes[i]).attr('stroke', (d) => `rgba(0, 0, 0, ${(1 - ((year - d[0].year) / 100) * 2) - 0.4})`).attr('stroke-width', 1);
-      d3.select(nodes[i]).attr('stroke', (d) => f(1 - ((year - d[0].year) / 100) * 2 - 0.4)).attr('stroke-width', 1);
+      d3.select(nodes[i]).attr('stroke', (d) => f(1 - ((year - d[0].year) / 100) * 2)).attr('stroke-width', 1);
     });
     // Add the line
     svg.current.select('.lines').append('path')
@@ -86,7 +86,7 @@ function App() {
       .datum(data.filter(el => (el.year === year)))
       .attr('fill', 'none')
       .attr('stroke', '#009edb')
-      .attr('stroke-width', 5)
+      .attr('stroke-width', 6)
       .attr('d', d3.line()
         .x((d) => x.current(d.date.toLocaleString('default', { month: 'short' }).slice(0, 3)))
         .y((d) => y.current(d.value)));
@@ -111,7 +111,7 @@ function App() {
           }
           return newState;
         });
-      }, 150);
+      }, 300);
     }
     // Clearing the interval
     return () => {
