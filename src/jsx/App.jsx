@@ -3,6 +3,10 @@ import React, {
 } from 'react';
 import '../styles/styles.less';
 
+// https://www.npmjs.com/package/react-is-visible
+import 'intersection-observer';
+import { useIsVisible } from 'react-is-visible';
+
 // https://d3js.org/
 import * as d3 from 'd3';
 
@@ -28,6 +32,7 @@ function App() {
   const y = useRef(null);
   const [curYear, setCurYear] = useState(startYear);
   const [data, setData] = useState(false);
+  const isVisible = useIsVisible(chartRef, { once: true });
 
   const f = chroma.scale(['rgba(0, 158, 219, 0.1)', 'rgba(0, 158, 219, 0.7)']).domain([0.67, 1]);
 
@@ -179,11 +184,15 @@ function App() {
   }, []);
 
   useEffect(() => {
-    createChart();
-  }, [createChart]);
+    if (isVisible === true) {
+      setTimeout(() => {
+        createChart();
+      }, 300);
+    }
+  }, [createChart, isVisible]);
 
   useEffect(() => {
-    if (data) {
+    if (data && svg.current !== null) {
       addData(curYear);
     }
   }, [addData, curYear, data]);
