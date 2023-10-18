@@ -23,6 +23,7 @@ function App() {
   const chartRef = useRef(null);
   const interval = useRef(null);
   const svg = useRef(null);
+  const appRef = useRef(null);
   const x = useRef(null);
   const y = useRef(null);
   const [curYear, setCurYear] = useState(startYear);
@@ -30,7 +31,7 @@ function App() {
 
   const f = chroma.scale(['rgba(0, 158, 219, 0.1)', 'rgba(0, 158, 219, 0.7)']).domain([0.67, 1]);
 
-  const tooltip = d3.select('.tooltip');
+  const tooltip = d3.select(appRef.current).select('.tooltip');
 
   const highlightLine = useCallback((event, d) => {
     if (d[0].year !== curYear) {
@@ -56,7 +57,7 @@ function App() {
     if (d[0].year !== curYear) {
       d3.select(event.currentTarget).attr('stroke-width', 1);
     }
-    d3.selectAll('.line').attr('stroke', (line) => ((line[0].year !== curYear) ? f(1 - ((curYear - line[0].year) / 100) * 2) : '#005392'));
+    svg.current.selectAll('.line').attr('stroke', (line) => ((line[0].year !== curYear) ? f(1 - ((curYear - line[0].year) / 100) * 2) : '#005392'));
     tooltip
       .transition()
       .duration(200)
@@ -104,13 +105,13 @@ function App() {
   const toggleInterval = () => {
     if (interval !== null) {
       interval.current = setInterval(() => {
-        document.querySelector('.play_pause_button').innerHTML = '⏸︎';
+        appRef.current.querySelector('.play_pause_button').innerHTML = '⏸︎';
         setCurYear(currentState => {
           const newState = currentState + 1;
           if (newState > endYear) {
             clearInterval(interval.current);
             interval.current = null;
-            document.querySelector('.play_pause_button').innerHTML = '⏵︎';
+            appRef.current.querySelector('.play_pause_button').innerHTML = '⏵︎';
             return currentState;
           }
           return newState;
@@ -126,11 +127,11 @@ function App() {
 
   const togglePlayPause = () => {
     if (interval.current !== null) { // Pause
-      document.querySelector('.play_pause_button').innerHTML = '⏵︎';
+      appRef.current.querySelector('.play_pause_button').innerHTML = '⏵︎';
       clearInterval(interval.current);
       interval.current = null;
     } else { // Play
-      document.querySelector('.play_pause_button').innerHTML = '⏸︎';
+      appRef.current.querySelector('.play_pause_button').innerHTML = '⏸︎';
       if (curYear === endYear) {
         setCurYear(startYear);
       }
@@ -195,7 +196,7 @@ function App() {
   };
 
   useEffect(() => {
-    const data_file = `${(window.location.href.includes('localhost:8080')) ? './' : 'https://unctad-infovis.github.io/2023-food_price_index/'}assets/data/2023-food_price_index.csv`;
+    const data_file = `${(window.location.href.includes('localhost:80')) ? './' : 'https://unctad-infovis.github.io/2023-food_price_index/'}assets/data/2023-food_price_index.csv`;
     try {
       fetch(data_file)
         .then((response) => {
@@ -213,11 +214,11 @@ function App() {
   }, []);
 
   return (
-    <div className="app">
+    <div className="app" ref={appRef}>
       <div className="container">
         <div className="title_container">
           <div className="title_logo_container">
-            <img src={`${(window.location.href.includes('localhost:8080')) ? './' : 'https://unctad-infovis.github.io/2023-food_price_index/'}/assets/img/unctad_logo.png`} alt="Logo" />
+            <img src={`${(window.location.href.includes('localhost:80')) ? './' : 'https://unctad-infovis.github.io/2023-food_price_index/'}/assets/img/unctad_logo.png`} alt="Logo" />
           </div>
           <div className="title_text_container">
             <h3>Food price Index</h3>
