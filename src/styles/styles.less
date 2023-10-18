@@ -5,8 +5,10 @@
 #app-root-2023-food_price_index .app {
   font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
   .container {
-    max-width: 700px;
+    box-sizing: border-box;
     margin: auto auto;
+    max-width: 700px;
+    padding: 0 5px;
     .title_container {
       display: flex;
       .title_logo_container {
@@ -63,7 +65,7 @@
         outline: none;
         padding: 0;
         vertical-align: middle;
-        width: calc(100% - 40px);
+        width: calc(100% - 50px);
         &[type="range"] {
           accent-color: @unbluedarktext;
         }
@@ -77,7 +79,13 @@
         }
       }
       .axis {
+        path {
+          stroke: #aaa;
+        }
         .tick {
+          line {
+            stroke: #aaa;
+          }
           text {
             fill: rgba(0, 0, 0, 0.8);
             font-size: 14px;

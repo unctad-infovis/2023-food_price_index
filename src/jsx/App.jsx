@@ -32,21 +32,25 @@ function App() {
 
   const tooltip = d3.select('.tooltip');
 
-  const mouseover = useCallback((event, d) => {
+  const highlightLine = useCallback((event, d) => {
     if (d[0].year !== curYear) {
       d3.select(event.currentTarget).attr('stroke-width', 3);
     }
     d3.select(event.currentTarget).attr('stroke', '#ab1d37');
-    tooltip.style('opacity', 1);
-  }, [tooltip, curYear]);
-
-  const mousemove = useCallback((event, d) => {
     tooltip
       .html(`${d[0].year}`)
       .style('opacity', 1)
       .style('left', `${(event.x) / 2}px`)
       .style('top', `${(event.y) / 2}px `);
-  }, [tooltip]);
+  }, [curYear, tooltip]);
+
+  const mouseover = useCallback((event, d) => {
+    highlightLine(event, d);
+  }, [highlightLine]);
+
+  const mousemove = useCallback((event, d) => {
+    highlightLine(event, d);
+  }, [highlightLine]);
 
   const mouseleave = useCallback((event, d) => {
     if (d[0].year !== curYear) {
