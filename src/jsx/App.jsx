@@ -217,7 +217,7 @@ function App() {
       <div className="container">
         <div className="title_container">
           <div className="title_logo_container">
-            <img src={`${(window.location.href.includes('localhost')) ? './' : 'https://unctad-infovis.github.io/2023-food_price_index/'}/assets/img/unctad_logo.png`} alt="Logo" />
+            <img src={`${(window.location.href.includes('localhost:8080')) ? './' : 'https://unctad-infovis.github.io/2023-food_price_index/'}/assets/img/unctad_logo.png`} alt="Logo" />
           </div>
           <div className="title_text_container">
             <h3>Food price Index</h3>
