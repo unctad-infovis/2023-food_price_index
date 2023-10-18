@@ -195,7 +195,7 @@ function App() {
   };
 
   useEffect(() => {
-    const data_file = (window.location.href.includes('unctad.org')) ? '/sites/default/files/data-file/2023-food_price_index.csv' : './assets/data/2023-food_price_index.csv';
+    const data_file = `${(window.location.href.includes('localhost')) ? './' : 'https://unctad-infovis.github.io/2023-food_price_index/'}assets/data/2023-food_price_index.csv`;
     try {
       fetch(data_file)
         .then((response) => {
@@ -217,7 +217,7 @@ function App() {
       <div className="container">
         <div className="title_container">
           <div className="title_logo_container">
-            <img src="./assets/img/unctad_logo.png" alt="Logo" />
+            <img src={`${(window.location.href.includes('localhost')) ? './' : 'https://unctad-infovis.github.io/2023-food_price_index/'}/assets/img/unctad_logo.png`} alt="Logo" />
           </div>
           <div className="title_text_container">
             <h3>Food price Index</h3>
