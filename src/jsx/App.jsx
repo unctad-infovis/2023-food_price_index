@@ -195,7 +195,7 @@ function App() {
   };
 
   useEffect(() => {
-    const data_file = `${(window.location.href.includes('localhost')) ? './' : 'https://unctad-infovis.github.io/2023-food_price_index/'}assets/data/2023-food_price_index.csv`;
+    const data_file = `${(window.location.href.includes('localhost:8080')) ? './' : 'https://unctad-infovis.github.io/2023-food_price_index/'}assets/data/2023-food_price_index.csv`;
     try {
       fetch(data_file)
         .then((response) => {
